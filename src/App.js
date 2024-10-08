@@ -1,24 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import EventContext from './context/EventContext';
+import Login from './components/Login';
+import Signups from './components/Signups';
+import UserDetails from './components/UserDetails';
 
 function App() {
+  const [userUpdate, setUserUpdate] = useState([]);
+
+  const addUser = (userData) => {
+    setUserUpdate((previousState) => [...previousState, userData]);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <EventContext.Provider value={{ userUpdate, addUser, setUserUpdate }}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/signups" element={<Signups />} />
+          <Route path="/user/:userId" element={<UserDetails />} />
+        </Routes>
+      </BrowserRouter>
+    </EventContext.Provider>
   );
 }
 
